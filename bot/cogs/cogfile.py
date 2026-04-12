@@ -3,7 +3,6 @@ from discord.ext import commands
 from discord import app_commands
 from bot.bot_config import GUILD_ID
 
-
 class TestCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
