@@ -12,6 +12,11 @@ class Client(commands.Bot):
 
     async def setup_hook(self):
         print("[SETUP HOOK] The setup hook has started")
+        for filename in os.listdir('./bot/cogs'):
+            if filename.endswith('.py'):
+                await self.load_extension(f'bot.cogs.{filename[:-3]}')
+                print(f'[SETUP HOOK] Loaded cog: {filename}')
+                
 
     async def on_ready(self):
         print(f"logged in: {self.user}")
