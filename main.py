@@ -3,7 +3,6 @@ import discord
 from discord.ext import commands
 
 import os
-
 import bot.bot_config as config
 
 class Client(commands.Bot):
@@ -11,12 +10,34 @@ class Client(commands.Bot):
         super().__init__(command_prefix="!", intents=config.INTENTS, application_id=config.APPLICATION_ID)
 
     async def setup_hook(self):
-        print("[SETUP HOOK] The setup hook has started")
-        for filename in os.listdir('./bot/cogs'):
-            if filename.endswith('.py'):
-                await self.load_extension(f'bot.cogs.{filename[:-3]}')
-                print(f'[SETUP HOOK] Loaded cog: {filename}')
-                
+        print("[SETUP HOOK] The setup_hook has started")
+        
+        await self.load_cogs_recursively()
+
+        print("[SETUP HOOK] setup_hook has completed")
+    
+    async def load_cogs_recursively(self, root="bot/cogs"):
+        root = root.replace("\\", "/")  # normalize path
+
+        for dirpath, _, filenames in os.walk(root):
+            module_base = dirpath.replace("/", ".")
+
+            for filename in filenames:
+                if not filename.endswith(".py"):
+                    continue
+
+                # Reject files containing "_" at the begining
+                if filename.startswith("_"):
+                    continue
+
+                module_name = filename[:-3]
+                extension_path = f"{module_base}.{module_name}"
+
+                try:
+                    await bot.load_extension(extension_path)
+                    print(f"[SETUP HOOK] Loaded cog: {extension_path}")
+                except Exception as e:
+                    print(f"[SETUP HOOK] Failed to load {extension_path}: {e}")
 
     async def on_ready(self):
         print(f"logged in: {self.user}")
