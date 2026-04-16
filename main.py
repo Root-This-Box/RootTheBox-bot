@@ -5,9 +5,19 @@ from discord.ext import commands
 import os
 import bot.bot_config as config
 
+async def get_prefix(bot, message):
+    # This function can be used to get a dynamic prefix based on the guild or other factors
+    prefix = ["!"]  # default prefix
+    
+    # if the author of the command is an admin this is the prefix they will use
+    if message.author.guild_permissions.administrator:
+        prefix.append("?")  # admin prefix
+    
+    return prefix
+
 class Client(commands.Bot):
     def __init__(self):
-        super().__init__(command_prefix="!", intents=config.INTENTS, application_id=config.APPLICATION_ID)
+        super().__init__(command_prefix=get_prefix, intents=config.INTENTS, application_id=config.APPLICATION_ID)
 
     async def setup_hook(self):
         print("[SETUP HOOK] The setup_hook has started")
