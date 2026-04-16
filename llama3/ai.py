@@ -2,12 +2,16 @@ import json
 import aiohttp
 import asyncio
 
-async def load_instructions() -> str:
-    with open("llama3/x/goal.md", "r", encoding="utf-8") as f:
+async def x_inst() -> str:
+    with open("llama3/x_inst.md", "r", encoding="utf-8") as f:
+        return f.read()
+    
+async def linkedin_inst() -> str:
+    with open("llama3/linkedin_inst.md", "r", encoding="utf-8") as f:
         return f.read()
 
-async def ai_call(prompt: str) -> str:
-    full_response = await load_instructions() + "\n\n" + prompt
+async def ai_call(instructions: str, prompt: str) -> str:
+    full_response = instructions + "\n\n" + prompt
 
 
     async with aiohttp.ClientSession() as session:
@@ -36,7 +40,8 @@ async def ai_call(prompt: str) -> str:
 
 async def main():
     user_input = input("Enter your prompt: ")
-    answer = await ai_call(user_input)
+    instructions = await x_inst()
+    answer = await ai_call(instructions, user_input)
     print("AI Response:", answer)
 
 if __name__ == "__main__":
