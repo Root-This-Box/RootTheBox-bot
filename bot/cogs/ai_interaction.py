@@ -9,9 +9,10 @@ TARGET_MINUTE = 0
 class Llama3Calling(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
+        self.scheduled_ai_call.start()
 
     @commands.command(name="create")
-    async def ai_call(self, ctx, type: str):
+    async def create_request(self, ctx, type: str):
         if ctx.prefix == "?":
             if type.lower() == "x" or type.lower() == "twitter" or type.lower() == "x.com":
                 await ctx.send("Provide a prompt for X/Twitter in your next message.")
@@ -72,7 +73,7 @@ class Llama3Calling(commands.Cog):
             channel = self.bot.get_channel(1494840441407803472)
 
             full_instructions = await daily_announcement_inst() + "\n" + await random_words("llama3/wordlist.txt", 10)
-            print("Running scheduled AI call with instructions:\n", full_instructions)
+
             response = await ai_call(full_instructions)
 
             await channel.send(response)
