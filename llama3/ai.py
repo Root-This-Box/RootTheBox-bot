@@ -1,6 +1,7 @@
 import json
 import aiohttp
 import asyncio
+import random
 
 async def x_inst() -> str:
     with open("llama3/x_inst.md", "r", encoding="utf-8") as f:
@@ -9,9 +10,29 @@ async def x_inst() -> str:
 async def linkedin_inst() -> str:
     with open("llama3/linkedin_inst.md", "r", encoding="utf-8") as f:
         return f.read()
+    
+async def discord_announcement_inst() -> str:
+    with open("llama3/disc_inst.md", "r", encoding="utf-8") as f:
+        return f.read()
 
-async def ai_call(instructions: str, prompt: str) -> str:
-    full_response = instructions + "\n\n" + prompt
+async def daily_announcement_inst() -> str:
+    with open("llama3/daily_task.md", "r", encoding="utf-8") as f:
+        return f.read()
+    
+async def random_words(file_path: str, count: int) -> str:
+    # Read all words from file
+    with open(file_path, "r", encoding="utf-8") as f:
+        words = [line.strip() for line in f if line.strip()]
+
+    # Ensure we have enough unique words
+    if count > len(words):
+        raise ValueError("Not enough unique words in the file.")
+
+    # Randomly pick unique words
+    return "\n".join(random.sample(words, count))
+
+async def ai_call(instructions: str, prompt: str | None=None) -> str:
+    full_response = instructions + "\n\n" + prompt if prompt else instructions
 
 
     async with aiohttp.ClientSession() as session:
@@ -36,7 +57,6 @@ async def ai_call(instructions: str, prompt: str) -> str:
                     data = json.loads(line.decode("utf-8"))
                     full_response += data.get("response", "")
     return full_response
-
 
 async def main():
     user_input = input("Enter your prompt: ")
