@@ -1,4 +1,6 @@
 # the main entrypoint for the bot
+import asyncio
+import subprocess
 import discord
 from discord.ext import commands
 
@@ -21,9 +23,14 @@ class Client(commands.Bot):
 
     async def setup_hook(self):
         print("[SETUP HOOK] The setup_hook has started")
-        
+        print("----------------------------------------------------------------------")
+
         await self.load_cogs_recursively()
 
+        print("\n\n")
+        await self.turn_ai_on()
+
+        print("----------------------------------------------------------------------")
         print("[SETUP HOOK] setup_hook has completed")
     
     async def load_cogs_recursively(self, root="bot/cogs"):
@@ -45,11 +52,34 @@ class Client(commands.Bot):
 
                 try:
                     await bot.load_extension(extension_path)
-                    print(f"[SETUP HOOK] Loaded cog: {extension_path}")
+                    print(f"[COG LOADER] Loaded cog: {extension_path}")
                 except Exception as e:
-                    print(f"[SETUP HOOK] Failed to load {extension_path}: {e}")
+                    print(f"[COG LOADER] Failed to load {extension_path}: {e}")
+
+    async def turn_ai_on(self):
+        #check if the ai is already on
+        proc = await asyncio.create_subprocess_shell(
+            "pgrep ollama",
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE
+        )
+        stdout, _ = await proc.communicate()
+
+        if stdout:
+            print("[AI] Ollama is already running.")
+            return
+        
+        print("[AI] Starting Ollama...")
+        subprocess.Popen(
+            ["ollama", "serve"],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
+        )
+        await asyncio.sleep(30)  # Wait a bit for Ollama to start
+        print("[AI] Ollama should now be running.")
 
     async def on_ready(self):
+        print("----------------------------------------------------------------------")
         print(f"logged in: {self.user}")
 
 bot = Client()
