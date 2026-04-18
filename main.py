@@ -27,7 +27,7 @@ class Client(commands.Bot):
 
         await self.load_cogs_recursively()
 
-        print("\n\n")
+        print("\n")
         await self.turn_ai_on()
 
         print("----------------------------------------------------------------------")
