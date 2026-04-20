@@ -80,9 +80,7 @@ class Llama3Calling(commands.Cog):
 
     @scheduled_ai_call.before_loop
     async def before_scheduled_ai_call(self):
-        print("Waiting for bot to be ready before starting scheduled AI calls...")
         await self.bot.wait_until_ready()
-        print("Bot is ready. Starting scheduled AI calls.")
 
 
 async def setup(bot):
