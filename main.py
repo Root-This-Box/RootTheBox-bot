@@ -59,7 +59,7 @@ class Client(commands.Bot):
         print("[SETUP HOOK] The setup_hook has started")
         print("----------------------------------------------------------------------")
         if is_distrobox():
-            print("[DISTRO BOX CHECKER]The enviroment is within a distrobox.\n__________________________________________")
+            print("[DISTRO BOX CHECKER] The enviroment is within a distrobox.\n__________________________________________")
         await self.load_cogs_recursively()
         print("__________________________________________")
         await self.turn_ai_on()
