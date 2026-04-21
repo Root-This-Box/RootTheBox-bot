@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 
 TARGET_REACTION = "💀"
-THRESHHOLD = 1
+THRESHHOLD = 5
 CHANNEL_ID = 1495806631940984882
 
 class reaction_listener(commands.Cog):
