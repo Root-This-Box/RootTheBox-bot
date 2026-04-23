@@ -61,7 +61,7 @@ class Client(commands.Bot):
         if is_distrobox():
             print("[DISTRO BOX CHECKER] The enviroment is within a distrobox.\n__________________________________________")
         await self.load_cogs_recursively()
-        print("__________________________________________")
+        # print("__________________________________________")
         # await self.turn_ai_on()
 
         print("----------------------------------------------------------------------")
