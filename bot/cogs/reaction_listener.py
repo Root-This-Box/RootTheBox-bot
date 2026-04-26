@@ -29,7 +29,7 @@ class reaction_listener(commands.Cog):
                 skull_count = reaction.count
                 break
 
-        if skull_count < THRESHHOLD:
+        if skull_count == THRESHHOLD:
             return
         
         skullboard_channel = self.bot.get_channel(CHANNEL_ID)
